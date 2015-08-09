@@ -310,8 +310,9 @@
       this.resizePixels();
 
       //TODO: DRAW GAME STATE
-
+      this.setStatus("Starting Random Draw");
       setInterval(function() {
+        app.setStatus("Randomising Stage");
         var newState = app.createEmptyArray(16, 32);
         for (var i = 0; i < 5; i++) {
           newState[(Math.floor(Math.random() * 16))][(Math.floor(Math.random() * 32))] = 1;
@@ -319,6 +320,7 @@
         app.draw(newState);
       }, 100);
 
+      this.setStatus("Running");
       $("#stage").fadeIn();
     },
     resizePixels: function() {
@@ -364,6 +366,7 @@
       return arr;
     },
     draw: function(state) {
+      app.setStatus("Drawing");
       if (Array.isArray(state)) {
         for (var i = 0; i < state.length; i++) {
           for (var j = 0; j < state[i].length; j++) {
