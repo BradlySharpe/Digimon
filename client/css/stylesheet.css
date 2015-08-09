@@ -1,0 +1,93 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.stage {
+  display: none;
+}
+
+.login {
+  display: none;
+  width: 28rem;
+  height:28.2rem;
+  margin: auto;
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  border-radius: .8rem;
+  border: .1rem solid #ccc;
+  text-align: center;
+  box-sizing: border-box;
+  transition: height .4s;
+}
+
+@media (min-width: 550px) {
+  .login {
+    height: 24.6rem;
+  }
+}
+
+.login.full {
+  height: 34.2rem;
+}
+
+@media (min-width: 550px) {
+  .login.full {
+    height: 35.2rem;
+  }
+}
+
+.userDetails {
+  display: none;
+}
+
+.login input {
+  width: 100%;
+}
+
+.login input:disabled {
+  cursor: not-allowed;
+}
+
+.status {
+  position: absolute;
+  bottom:0;
+  right:0;
+  left:0;
+  background-color: #e4e4e4;
+  padding: .5rem .1rem;
+}
+
+.error {
+  background-color: #da3939;
+}
+
+.status p {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.stage {
+  position: absolute;
+  border: .1rem solid #323232;
+}
+
+.pixelGroup {
+  margin: auto;
+}
+.pixelGroup:after{
+}
+
+.pixel {
+  background-color: transparent;
+  display: inline-block;
+}
+
+.pixel.fill {
+  background-color: #323232;
+}
