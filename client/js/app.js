@@ -23,7 +23,6 @@
       if (!('WebSocket' in window))
         throw new Exception('Your browser doesn\'t support WebSockets');
       this.createSocket();
-      
     },
     setStatus: function(message, error) {
       if (error)
