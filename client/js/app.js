@@ -20,7 +20,7 @@
         throw new Exception('Your browser hasn\'t loaded sha1.js');
       if (!('WebSocket' in window))
         throw new Exception('Your browser doesn\'t support WebSockets');
-      this.createSocket();
+      this.createSocket();  
     },
     setStatus: function(message, error) {
       if (error)
