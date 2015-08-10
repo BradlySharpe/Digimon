@@ -2,8 +2,9 @@
   "use strict";
   var app = {
     socket: undefined,
-    socketUrl: 'ws://10.81.4.17:8080',
-    //git config remote.origin.url https://brad7928:{PASSWORD}@github.com/brad7928/Digimon.git
+    //socketUrl: 'ws://10.81.4.17:8080',
+    socketUrl: 'ws://192.168.1.11:8080',
+    quiet: true,
     id: undefined,
     token: undefined,
     hash: undefined,
@@ -21,7 +22,7 @@
         throw new Exception('Your browser hasn\'t loaded sha1.js');
       if (!('WebSocket' in window))
         throw new Exception('Your browser doesn\'t support WebSockets');
-      this.createSocket();  
+      this.createSocket();
     },
     setStatus: function(message, error) {
       if (error)
@@ -100,11 +101,13 @@
       }
     },
     socketSendMessage: function(message) {
-      console.log("Sending Message", message);
+      if (!this.quiet)
+        console.log("Sending Message", message);
       this.socket.send(JSON.stringify(message));
     },
     handleMessage: function(msg) {
-      console.log("Handle Message", msg);
+      if (!this.quiet)
+        console.log("Handle Message", msg);
       if (msg.error) {
         this.reset();
         this.setStatus("Error: " + msg.message, true);
@@ -167,7 +170,6 @@
     user: function(action, data) {
       if ("usernameExistsResponse" == action) {
         if (false === data.exists) {
-          console.log("usernameExistsResponse", data);
           var userDetails = $("#userDetails"),
             username = $("#username"),
             password = $("#password");
@@ -327,7 +329,6 @@
     resizePixels: function() {
       var height = Math.floor((window.innerHeight - ($("#status").outerHeight())) / 16),
         width = Math.floor(window.innerWidth / 32);
-      console.log(height, width);
       var length = Math.min(width,height),
         pixels = document.getElementsByClassName("pixel");
 
