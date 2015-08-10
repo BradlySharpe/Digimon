@@ -1,7 +1,11 @@
 <?php
 
-  require ('logic' . DIRECTORY_SEPARATOR . 'Messaging.php');
-  require ('logic' . DIRECTORY_SEPARATOR . 'DBase.php');
+  $LOGIC_BASE = 'logic' . DIRECTORY_SEPARATOR;
+  $MONSTER_BASE = $LOGIC_BASE . DIRECTORY_SEPARATOR . 'monsters' . DIRECTORY_SEPARATOR;
+
+  require ($LOGIC_BASE . 'Messaging.php');
+  require ($LOGIC_BASE . 'DBase.php');
+  require ($MONSTER_BASE . 'Egg.php');
 
   class Game {
     private $_client = null;
