@@ -2,7 +2,7 @@
   "use strict";
   var app = {
     socket: undefined,
-    socketUrl: 'ws://192.168.1.11:8080',
+    socketUrl: 'ws://10.81.4.17:8080',
     id: undefined,
     token: undefined,
     hash: undefined,
@@ -314,11 +314,11 @@
       setInterval(function() {
         app.setStatus("Randomising Stage");
         var newState = app.createEmptyArray(16, 32);
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 100; i++) {
           newState[(Math.floor(Math.random() * 16))][(Math.floor(Math.random() * 32))] = 1;
         }
         app.draw(newState);
-      }, 100);
+      }, 50);
 
       this.setStatus("Running");
       $("#stage").fadeIn();
