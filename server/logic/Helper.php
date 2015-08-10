@@ -27,4 +27,15 @@
         {
 
         }
+
+        public static function createEmptyArray($height = 16, $width = 32) {
+          $ar = [];
+          for ($i=0; $i < $height; $i++) {
+            $ar[$i] = [];
+            for ($j=0; $j < $width; $j++) {
+              $ar[$i][$j] = 0;
+            }
+          }
+          return $ar;
+        }
     }

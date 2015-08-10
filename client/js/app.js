@@ -4,7 +4,7 @@
     socket: undefined,
     //socketUrl: 'ws://10.81.4.17:8080',
     socketUrl: 'ws://192.168.1.11:8080',
-    quiet: true,
+    quiet: false,
     id: undefined,
     token: undefined,
     hash: undefined,
@@ -93,12 +93,14 @@
     socketReceiveMessage: function(e) {
       if (!e.data)
         throw new Exception('Invalid response from server');
+        var message = "";
       try {
-        var message = jQuery.parseJSON(e.data);
-        app.handleMessage.call(app, message);
+        message = jQuery.parseJSON(e.data);
       } catch (ex) {
         console.error("Invalid message returned from server", e.data, ex);
       }
+      if ("" != message)
+        app.handleMessage.call(app, message);
     },
     socketSendMessage: function(message) {
       if (!this.quiet)
@@ -122,6 +124,9 @@
           break;
         case 'user':
           this.user(msg.action, msg.data);
+          break;
+        case 'stage':
+          this.startDraw(msg.action, msg.data);
           break;
         case 'pong':
           break;
@@ -302,7 +307,7 @@
       }
 
       this.lastState = this.createEmptyArray(16, 32);
-      console.log(this.lastState);
+      //console.log(this.lastState);
 
       var stage = document.getElementById("stage");
       if (stage)
@@ -313,15 +318,16 @@
       this.resizePixels();
 
       //TODO: DRAW GAME STATE
-      this.setStatus("Starting Random Draw");
-      setInterval(function() {
-        app.setStatus("Randomising Stage");
-        var newState = app.createEmptyArray(16, 32);
-        for (var i = 0; i < 100; i++) {
-          newState[(Math.floor(Math.random() * 16))][(Math.floor(Math.random() * 32))] = 1;
-        }
-        app.draw(newState);
-      }, 50);
+      // this.setStatus("Starting Random Draw");
+      // setInterval(function() {
+      //   app.setStatus("Randomising Stage");
+      //   var newState = app.createEmptyArray(16, 32);
+      //   for (var i = 0; i < 100; i++) {
+      //     newState[(Math.floor(Math.random() * 16))][(Math.floor(Math.random() * 32))] = 1;
+      //   }
+      //   app.draw(newState);
+      // }, 50);
+      this.requestFrame();
 
       this.setStatus("Running");
       $("#stage").fadeIn();
@@ -361,21 +367,35 @@
     createEmptyArray: function(length) {
       var arr = new Array(length || 0),
           i = length;
+      for (var i = 0; i < arr.length; i++) {
+        arr[i] = 0;
+      }
       if (arguments.length > 1) {
           var args = Array.prototype.slice.call(arguments, 1);
           while(i--) arr[length-1 - i] = this.createEmptyArray.apply(app, args);
       }
       return arr;
     },
+    requestFrame: function() {
+      setTimeout(function() {
+        app.socketSendMessage({'event' : 'stage'});
+      }, 100);
+    },
+    startDraw: function(action, data) {
+      console.log("Drawing", data);
+      this.draw(data.frame);
+      //this.requestFrame();
+    },
     draw: function(state) {
-      app.setStatus("Drawing");
       if (Array.isArray(state)) {
+        console.log(state);
         for (var i = 0; i < state.length; i++) {
           for (var j = 0; j < state[i].length; j++) {
             if (state[i][j] != app.lastState[i][j])
               $("#pixel-"+i+"-"+j).toggleClass('fill');
           }
         }
+        app.lastState = state;
       }
     }
   };

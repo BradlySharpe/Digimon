@@ -1,18 +1,27 @@
 <?php
 
-  $LOGIC_BASE = 'logic' . DIRECTORY_SEPARATOR;
-  $MONSTER_BASE = $LOGIC_BASE . DIRECTORY_SEPARATOR . 'monsters' . DIRECTORY_SEPARATOR;
 
-  require ($LOGIC_BASE . 'Messaging.php');
-  require ($LOGIC_BASE . 'DBase.php');
-  require ($MONSTER_BASE . 'Egg.php');
+  define("BASE", dirname(__FILE__) . DIRECTORY_SEPARATOR);
+  define("LOGIC_BASE", BASE . 'logic' . DIRECTORY_SEPARATOR);
+  define("MONSTER_BASE", LOGIC_BASE . 'monsters' . DIRECTORY_SEPARATOR);
+
+  echo BASE."\n" . LOGIC_BASE."\n" . MONSTER_BASE."\n";
+
+  require (LOGIC_BASE . 'Messaging.php');
+  require (LOGIC_BASE . 'DBase.php');
+  require (LOGIC_BASE . 'Helper.php');
+  require (MONSTER_BASE . 'Monster.php');
+  require (MONSTER_BASE . 'Egg.php');
 
   class Game {
     private $_client = null;
     private $_db = null;
     private $_userId = null;
+    private $_monster;
+    const QUIET = true;
 
     public function __construct($client) {
+      $this->_monster = new Egg();
       $this->_client = $client;
       $this->_db = new DBase($this);
 
@@ -35,7 +44,8 @@
     }
 
     public function handleMessage($message) {
-      echo "(" . $this->_client->resourceId . ") Message Received: \n\t$message \n";
+      if (!self::QUIET)
+        echo "(" . $this->_client->resourceId . ") Message Received: \n\t$message \n";
       $message = json_decode($message);
       switch ($message->event) {
         case 'user':
@@ -47,6 +57,24 @@
         case 'ping':
           if ($this->checkValidToken())
             $this->sendMessage(Messaging::pong());
+          break;
+        case 'stage':
+          if ($this->checkValidToken()) {
+            $monsterFrame = $this->_monster->getNextState();
+            $Helper = Helper::getInstance();
+            $stage = $Helper::createEmptyArray();
+            $_monFrame = $monsterFrame['monster']['sprite'];
+
+            print_r($_monFrame);
+            for ($i=0; $i < count($_monFrame); $i++) {
+              for ($j=0; $j < count($_monFrame[$i]); $j++) {
+                if (0 != $_monFrame[$i][$j]) {
+                  $stage[$i+$monsterFrame['xoffset']][$j+$monsterFrame['yoffset']] = $_monFrame[$i][$j];
+                }
+              }
+            }
+            $this->sendMessage(Messaging::response('stage', 'frame', '', array('frame' => $stage)));
+          }
           break;
         default:
           $this->sendError("Unknown Message: " . json_encode($message));
@@ -180,7 +208,8 @@
     }
 
     public function sendMessage($message) {
-      echo "(" . $this->_client->resourceId . ") Message Sent: \n\t$message\n";
+      if (!self::QUIET)
+        echo "(" . $this->_client->resourceId . ") Message Sent: \n\t$message\n";
       $this->_client->send($message);
     }
 

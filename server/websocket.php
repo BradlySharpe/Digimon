@@ -6,7 +6,7 @@
   use Ratchet\WebSocket\WsServer;
   use Ratchet\MessageComponentInterface;
   use Ratchet\ConnectionInterface;
-
+  
   class WebSocket implements MessageComponentInterface{
     protected $clients = [];
     public static $port = 8080;
