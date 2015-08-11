@@ -2,7 +2,7 @@
   class Egg extends Monster {
 
     private $tall = ['width' => 11, 'height' => 12, 'sprite' => []];
-    private $small = ['width' => 13, 'height' => 9, 'sprite' => []];
+    private $small = ['width' => 14, 'height' => 10, 'sprite' => []];
 
     public function __construct() {
       parent::__construct();
@@ -50,12 +50,12 @@
 
       $this->stages = [
         [
-          'xoffset' => 0,
+          'xoffset' => 10,
           'yoffset' => 0,
           'sprite' => $this->tall
         ],
         [
-          'xoffset' => 0,
+          'xoffset' => 8,
           'yoffset' => 0,
           'sprite' => $this->small
         ]
