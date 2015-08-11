@@ -1,7 +1,8 @@
 <?php
   require ('websocket.php');
   /*
-  Start - ctrl-shift-b
-  Stop  - ctrl-q
+  Requires - Atom Script Package
+    Start - ctrl-shift-b
+    Stop  - ctrl-q
   */
  ?>
