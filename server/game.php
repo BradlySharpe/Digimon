@@ -65,15 +65,15 @@
             $stage = $Helper::createEmptyArray();
             $_monFrame = $monsterFrame['monster']['sprite'];
 
-            print_r($_monFrame);
+            //print_r($_monFrame);
             for ($i=0; $i < count($_monFrame); $i++) {
               for ($j=0; $j < count($_monFrame[$i]); $j++) {
                 if (0 != $_monFrame[$i][$j]) {
-                  $stage[$i+$monsterFrame['xoffset']][$j+$monsterFrame['yoffset']] = $_monFrame[$i][$j];
+                  $stage[$i+$monsterFrame['yoffset']][$j+$monsterFrame['xoffset']] = $_monFrame[$i][$j];
                 }
               }
             }
-            $this->sendMessage(Messaging::response('stage', 'frame', '', array('frame' => $stage)));
+            $this->sendMessage(Messaging::response('stage', 'frame', array('frame' => $stage)));
           }
           break;
         default:
