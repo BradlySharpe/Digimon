@@ -6,7 +6,7 @@
   use Ratchet\WebSocket\WsServer;
   use Ratchet\MessageComponentInterface;
   use Ratchet\ConnectionInterface;
-  
+
   class WebSocket implements MessageComponentInterface{
     protected $clients = [];
     public static $port = 8080;
@@ -68,7 +68,8 @@
      */
     private function closeGame($con) {
       $game = $this->_getGame($con);
-      $game->close();
+      if ($game)
+        $game->close();
       unset($this->clients[$con->resourceId]);
     }
 
@@ -78,7 +79,9 @@
      * @return Game                     game object for connection
      */
     private function _getGame($con) {
-      return $this->clients[$con->resourceId]['game'];
+      if (array_key_exists($con->resourceId, $this->clients))
+        return $this->clients[$con->resourceId]['game'];
+      return;
     }
   }
 
